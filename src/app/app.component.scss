@@ -1,0 +1,14 @@
+@font-face {
+  font-family: "Symbola";
+  src: url("https://cdn.jsdelivr.net/gh/stefanoclub/symbola-font/Symbola.woff2")
+    format("woff2");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Aplicar solo a símbolos musicales */
+.music-symbol {
+  font-family: "Symbola", serif;
+  font-size: 1.5rem;
+}
