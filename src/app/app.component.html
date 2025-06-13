@@ -1,138 +1,188 @@
-<div class="container py-4">
-  <header class="mb-4">
-    <h1 class="text-center">Musescore Editor</h1>
+<div class="container-fluid py-4">
+  <header class="mb-4 text-center">
+    <h1>Musescore Editor</h1>
   </header>
 
-  <!-- Notas -->
-  <div class="mb-4 text-center">
-    <h5 class="mb-3">Notas</h5>
-    <div class="d-flex flex-wrap justify-content-center gap-2">
-      <button
-        class="btn"
-        *ngFor="let nota of notasDisponibles"
-        [ngClass]="selectedNote === nota ? 'btn-primary' : 'btn-light border'"
-        (click)="selectNote(nota)"
-      >
-        {{ nota }}
-      </button>
+  <div class="row">
+    <!-- Lado izquierdo: Editor -->
+    <div class="col-md-9">
+      <div class="row text-center mb-4">
+        <!-- Columna 1: Notas -->
+        <div class="col-md-4 mb-3">
+          <h5 class="mb-3">Notas</h5>
+          <div class="d-flex flex-wrap justify-content-center gap-2">
+            <button
+              class="btn"
+              *ngFor="let nota of notasDisponibles"
+              [ngClass]="
+                selectedNote === nota ? 'btn-primary' : 'btn-light border'
+              "
+              (click)="selectNote(nota)"
+            >
+              {{ nota }}
+            </button>
+          </div>
+        </div>
+
+        <!-- Columna 2: Figuras/Silencios + Puntillo -->
+        <div class="col-md-4 mb-3">
+          <div class="btn-group mb-2" role="group">
+            <button
+              type="button"
+              class="btn"
+              [ngClass]="showSilences ? 'btn-outline-dark' : 'btn-dark'"
+              (click)="selectTab(false)"
+            >
+              Figuras
+            </button>
+            <button
+              type="button"
+              class="btn"
+              [ngClass]="showSilences ? 'btn-dark' : 'btn-outline-dark'"
+              (click)="selectTab(true)"
+            >
+              Silencios
+            </button>
+          </div>
+
+          <div class="d-flex flex-wrap justify-content-center gap-2 mb-3">
+            <button
+              class="btn"
+              *ngFor="let figura of figuras"
+              [ngClass]="
+                selectedFigure ===
+                (showSilences ? figura + ' (silencio)' : figura)
+                  ? 'btn-primary'
+                  : 'btn-light border'
+              "
+              data-bs-toggle="tooltip"
+              [attr.title]="showSilences ? 'Silencio de ' + figura : figura"
+              (click)="
+                selectFigure(showSilences ? figura + ' (silencio)' : figura)
+              "
+            >
+              {{ figura }}
+            </button>
+          </div>
+
+          <div class="form-check d-inline-block">
+            <input
+              class="form-check-input"
+              type="checkbox"
+              id="puntilloCheckbox"
+              [(ngModel)]="puntillo"
+            />
+            <label class="form-check-label" for="puntilloCheckbox">
+              Puntillo
+            </label>
+          </div>
+        </div>
+
+        <!-- Columna 3: Alteraciones -->
+        <div class="col-md-4 mb-3">
+          <h5 class="mb-3">Alteraciones</h5>
+          <div class="d-flex flex-wrap justify-content-center gap-2">
+            <button
+              class="btn"
+              [ngClass]="
+                alteration === '♯' ? 'btn-secondary' : 'btn-outline-secondary'
+              "
+              (click)="selectAlteration('♯')"
+            >
+              ♯
+            </button>
+            <button
+              class="btn"
+              [ngClass]="
+                alteration === '♭' ? 'btn-secondary' : 'btn-outline-secondary'
+              "
+              (click)="selectAlteration('♭')"
+            >
+              ♭
+            </button>
+            <button
+              class="btn"
+              [ngClass]="
+                alteration === '♮' ? 'btn-secondary' : 'btn-outline-secondary'
+              "
+              (click)="selectAlteration('♮')"
+            >
+              ♮
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Botones Agregar y Limpiar -->
+      <div class="row mb-4">
+        <div class="col-12 text-center">
+          <button
+            class="btn btn-success me-3"
+            [disabled]="!canAddNote()"
+            (click)="addNote()"
+          >
+            Agregar Nota
+          </button>
+          <button class="btn btn-danger" (click)="limpiarNotas()">
+            Limpiar
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Lado derecho: Guía de Teclas -->
+    <div class="col-md-3 px-4">
+      <h5 class="text-center mb-3">Guía de Teclas</h5>
+
+      <div class="row small">
+        <!-- Columna 3: Notas -->
+        <div class="col-3">
+          <h6 class="text-decoration-underline">Notas</h6>
+          <ul class="list-unstyled">
+            <li><strong>P</strong> → DO</li>
+            <li><strong>O</strong> → RE</li>
+            <li><strong>I</strong> → MI</li>
+            <li><strong>U</strong> → FA</li>
+            <li><strong>Q</strong> → SOL</li>
+            <li><strong>W</strong> → LA</li>
+            <li><strong>E</strong> → SI</li>
+            <li><strong>R</strong> → DOA</li>
+            <li><strong>T</strong> → REA</li>
+            <li><strong>Y</strong> → MIA</li>
+          </ul>
+        </div>
+
+        <!-- Columna 9: Figuras y Extras -->
+        <div class="col-9">
+          <h6 class="text-decoration-underline">Figuras / Extras</h6>
+          <ul class="list-unstyled">
+            <li><strong>Z</strong> → REDONDA</li>
+            <li><strong>X</strong> → BLANCA</li>
+            <li><strong>C</strong> → NEGRA</li>
+            <li><strong>V</strong> → CORCHEA</li>
+            <li><strong>B</strong> → SEMICORCHEA</li>
+            <li><strong>N</strong> → FUSA</li>
+            <li><strong>M</strong> → SEMIFUSA</li>
+            <li><strong>1</strong> → ♯</li>
+            <li><strong>2</strong> → ♭</li>
+            <li><strong>3</strong> → ♮</li>
+            <li><strong>.</strong> → Puntillo</li>
+            <li><strong>Enter</strong> → Agregar Nota</li>
+            <li><strong>Tab</strong> → Figuras/Silencios</li>
+          </ul>
+        </div>
+      </div>
     </div>
   </div>
 
-  <!-- Figuras / Silencios -->
-  <div class="mb-4 text-center">
-    <div class="btn-group mb-3" role="group">
-      <button
-        type="button"
-        class="btn"
-        [ngClass]="showSilences ? 'btn-outline-dark' : 'btn-dark'"
-        (click)="selectTab(false)"
-      >
-        Figuras
-      </button>
-      <button
-        type="button"
-        class="btn"
-        [ngClass]="showSilences ? 'btn-dark' : 'btn-outline-dark'"
-        (click)="selectTab(true)"
-      >
-        Silencios
-      </button>
+  <!-- Textarea ocupa toda la pantalla abajo -->
+  <div class="row mt-4">
+    <div class="col-12">
+      <textarea
+        class="form-control"
+        rows="6"
+        [(ngModel)]="textoNotas"
+      ></textarea>
     </div>
-
-    <div
-      *ngIf="!showSilences"
-      class="d-flex flex-wrap justify-content-center gap-2"
-    >
-      <button
-        class="btn"
-        *ngFor="let figura of figuras"
-        [ngClass]="
-          selectedFigure === figura ? 'btn-primary' : 'btn-light border'
-        "
-        data-bs-toggle="tooltip"
-        [attr.title]="figura"
-        (click)="selectFigure(figura)"
-      >
-        {{ figura }}
-      </button>
-    </div>
-
-    <div
-      *ngIf="showSilences"
-      class="d-flex flex-wrap justify-content-center gap-2"
-    >
-      <button
-        class="btn"
-        *ngFor="let figura of figuras"
-        [ngClass]="
-          selectedFigure === figura + ' (silencio)'
-            ? 'btn-primary'
-            : 'btn-light border'
-        "
-        data-bs-toggle="tooltip"
-        [attr.title]="'Silencio de ' + figura"
-        (click)="selectFigure(figura + ' (silencio)')"
-      >
-        {{ figura }}
-      </button>
-    </div>
-  </div>
-
-  <!-- Puntillo -->
-  <div class="text-center mb-3">
-    <div class="form-check d-inline-block">
-      <input
-        class="form-check-input"
-        type="checkbox"
-        id="puntilloCheckbox"
-        [(ngModel)]="puntillo"
-      />
-      <label class="form-check-label" for="puntilloCheckbox"> Puntillo </label>
-    </div>
-  </div>
-
-  <!-- Alteraciones -->
-  <div class="text-center mb-3">
-    <h5 class="mb-2">Alteraciones</h5>
-    <div class="d-flex justify-content-center gap-2">
-      <button
-        class="btn"
-        [ngClass]="alteration === '♯' ? 'btn-primary' : 'btn-light border'"
-        (click)="selectAlteration('♯')"
-      >
-        Sostenido
-      </button>
-      <button
-        class="btn"
-        [ngClass]="alteration === '♭' ? 'btn-primary' : 'btn-light border'"
-        (click)="selectAlteration('♭')"
-      >
-        Bemol
-      </button>
-      <button
-        class="btn"
-        [ngClass]="alteration === '♮' ? 'btn-primary' : 'btn-light border'"
-        (click)="selectAlteration('♮')"
-      >
-        Becuadro
-      </button>
-    </div>
-  </div>
-
-  <!-- Botones Agregar y Limpiar -->
-  <div class="text-center mb-3 d-flex justify-content-center gap-3">
-    <button
-      class="btn btn-success"
-      [disabled]="!canAddNote()"
-      (click)="addNote()"
-    >
-      Agregar Nota
-    </button>
-    <button class="btn btn-danger" (click)="limpiarNotas()">Limpiar</button>
-  </div>
-
-  <!-- Caja de texto editable -->
-  <div class="mb-4">
-    <textarea class="form-control" rows="5" [(ngModel)]="textoNotas"></textarea>
   </div>
 </div>
