@@ -20,6 +20,10 @@ export class AppComponent implements AfterViewInit {
   alteration: string = '';
   notasAnotadas: string[] = [];
   textoNotas: string = '';
+  compasSeleccionado: string = '4/4';
+  armaduraSeleccionada: string = '1'; // Sol Mayor (1 sostenido)
+  divisiones: number = 1;
+  claveSeleccionada: string = 'G'; // Clave de sol por defecto
 
   notasDisponibles: string[] = [
     'DO',

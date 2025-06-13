@@ -6,6 +6,56 @@
   <div class="row">
     <!-- Lado izquierdo: Editor -->
     <div class="col-md-9">
+      <!-- Configuración general de la partitura -->
+      <div class="row text-center mb-4">
+        <div class="col-md-3">
+          <h6>Clave Musical</h6>
+          <select
+            class="form-select text-center"
+            [(ngModel)]="claveSeleccionada"
+          >
+            <option value="G">Sol (G)</option>
+            <option value="F">Fa (F)</option>
+          </select>
+        </div>
+
+        <div class="col-md-3">
+          <h6>Compás</h6>
+          <select
+            class="form-select text-center"
+            [(ngModel)]="compasSeleccionado"
+          >
+            <option value="2/4">2/4</option>
+            <option value="3/4">3/4</option>
+            <option value="4/4">4/4</option>
+            <option value="6/8">6/8</option>
+          </select>
+        </div>
+
+        <div class="col-md-3">
+          <h6>Armadura</h6>
+          <select
+            class="form-select text-center"
+            [(ngModel)]="armaduraSeleccionada"
+          >
+            <option value="1">Sol Mayor (1♯)</option>
+            <option value="-1">Fa Mayor (1♭)</option>
+            <option value="2">Re Mayor (2♯)</option>
+          </select>
+        </div>
+
+        <div class="col-md-3">
+          <h6>Divisiones</h6>
+          <input
+            type="number"
+            class="form-control text-center"
+            [(ngModel)]="divisiones"
+            min="1"
+          />
+        </div>
+      </div>
+
+      <!-- Contenido principal en 3 columnas -->
       <div class="row text-center mb-4">
         <!-- Columna 1: Notas -->
         <div class="col-md-4 mb-3">
@@ -26,6 +76,7 @@
 
         <!-- Columna 2: Figuras/Silencios + Puntillo -->
         <div class="col-md-4 mb-3">
+          <h5 class="mb-2">Figuras / Silencios</h5>
           <div class="btn-group mb-2" role="group">
             <button
               type="button"
@@ -73,7 +124,7 @@
               [(ngModel)]="puntillo"
             />
             <label class="form-check-label" for="puntilloCheckbox">
-              Puntillo
+              Activar Puntillo
             </label>
           </div>
         </div>
